@@ -5,7 +5,7 @@ import android.util.Log;
 
 public class Logger {
 
-    private static final String TAG = "com.nagopy.android.xposed.sharp.veilview";
+    private static final String TAG = "VeilViewPatch";
 
     private Logger() {
     }

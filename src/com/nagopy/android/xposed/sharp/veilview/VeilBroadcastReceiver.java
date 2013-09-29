@@ -21,6 +21,12 @@ public class VeilBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        if (intent.getAction().equals(Const.ACTION_REMOVE_OTHER_RECEIVER)) {
+            // 解除アクションがきたら解除して終了する
+            context.unregisterReceiver(this);
+            return;
+        }
+
         try {
             if (!mCopyOfVeilViewButton.isActive()) {
                 // 何かしらなくなっていれば外す
@@ -57,7 +63,7 @@ public class VeilBroadcastReceiver extends BroadcastReceiver {
             }
 
             Logger.d("VeilBroadcastReceiver#onReceive", "action:" + intent.getAction(),
-                    intent.getExtras());
+                    intent.getExtras(), this.toString());
         } catch (Throwable t) {
             Logger.d("error", t, getClass().getName(), "mCopyOfVeilViewButton = "
                     + mCopyOfVeilViewButton);
