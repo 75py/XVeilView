@@ -4,6 +4,7 @@ package com.nagopy.android.xposed.sharp.veilview;
 import java.lang.reflect.Method;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 
 import com.nagopy.android.xposed.sharp.veilview.util.Const;
@@ -43,12 +44,16 @@ public class VeilViewPatcher implements IXposedHookLoadPackage {
                 protected void afterHookedMethod(final MethodHookParam param) throws Throwable {
                     Context context = (Context) param.args[0];
 
+                    // まずは既に登録済みのものを解除する
+                    context.sendBroadcast(new Intent(Const.ACTION_REMOVE_OTHER_RECEIVER));
+
                     VeilBroadcastReceiver veilBroadcastReceiver = new VeilBroadcastReceiver(
                             param.thisObject, getStatus, doON, doOFF);
                     IntentFilter intentFilter = new IntentFilter();
                     intentFilter.addAction(Const.ACTION_REQUEST_VEIL_VIEW_STATE);
                     intentFilter.addAction(Const.ACTION_SET_VEIL_VIEW_STATE);
                     intentFilter.addAction(Const.ACTION_SWITCH_VEIL_VIEW_STATE);
+                    intentFilter.addAction(Const.ACTION_REMOVE_OTHER_RECEIVER);
 
                     context.registerReceiver(veilBroadcastReceiver, intentFilter);
                 }
